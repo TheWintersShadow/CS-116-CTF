@@ -2,7 +2,7 @@
 
 <html>
 <head>
-<title>2015 CTF Scoreboard</title>
+<title>CTF Scoreboard</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
 <style>
@@ -11,7 +11,7 @@
 </head>
 
 <body>
-<h1>2015 CTF Scoreboard</h1>
+<h1>CTF Scoreboard</h1>
 <?php
     $deduction = -100;
     $actualtampertoken = "skymanatees";
