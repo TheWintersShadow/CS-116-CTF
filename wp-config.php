@@ -55,7 +55,7 @@ define('NONCE_SALT',       '4l4eL@(0q{U]X9[p|*FNf-rTYI;|C/G@~q,c`c+ol(}:0-9uN$q)
 define('WP_DEBUG', true);
 define('WP_DEBUG_LOG', true);
 define('WP_DEBUG_DISPLAY', true);
-@ini_set('display_errors', 1);
+@ini_set('display_errors', 0);
 
 
 /**#@-*/
