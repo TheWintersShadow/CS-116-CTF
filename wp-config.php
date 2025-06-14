@@ -56,6 +56,11 @@ error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
 @ini_set('display_errors', 0);
 define('WP_DEBUG', false);
 
+define('WP_DEBUG', true);
+define('WP_DEBUG_LOG', true);
+define('WP_DEBUG_DISPLAY', false);  // hides errors from browser but logs them
+
+
 
 /**#@-*/
 
