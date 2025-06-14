@@ -52,10 +52,9 @@ define('LOGGED_IN_SALT',   '+1?V)pSD4aI_N$Dg&q8#VO8J6CW+WbL`<9QuPox%XvhGx cB1eR-
 define('NONCE_SALT',       '4l4eL@(0q{U]X9[p|*FNf-rTYI;|C/G@~q,c`c+ol(}:0-9uN$q)n@J2X|z{zI.2');
 
 // Disable deprecated warnings
-error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 @ini_set('display_errors', 0);
 
-define('WP_DEBUG', true);
 
 /**#@-*/
 
