@@ -1,14 +1,14 @@
-<!DOCTYPE>
+<!DOCTYPE html>
+<html>
 <head>
-	<head>
-		<title>The Happening</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<link rel="alternate stylesheet" type="text/css" href="site_burichan.css" title="Burichan" />
-		<link rel="alternate stylesheet" type="text/css" href="site_futaba.css" title="Futaba" />
-		<link rel="stylesheet" type="text/css" href="site_kusabax.css" title="Kusabax" />
-	</head>
+	<title>The Happening</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="alternate stylesheet" type="text/css" href="site_burichan.css" title="Burichan" />
+	<link rel="alternate stylesheet" type="text/css" href="site_futaba.css" title="Futaba" />
+	<link rel="stylesheet" type="text/css" href="site_kusabax.css" title="Kusabax" />
+</head>
 
-	<body>
+<body>
 
 	<?php
 		$myUserName = "root";
@@ -23,7 +23,7 @@
 		}
 		$query = "";		
 
-		$id = isset($_GET["id"]) ? $_GET["id"] : null;
+		$id = $_GET["id"] ?? null;
 		if (!empty($_POST)) {
 			if (!empty($_POST['title']) && !empty($_POST['post'])) {
 				$query = "INSERT INTO posts (title, post, active, updated_at) VALUES ('" . $dbh->real_escape_string($_POST['title']) . "', '" . $dbh->real_escape_string($_POST['post']) . "', 1, NOW())";
@@ -77,4 +77,4 @@
 		<h3><a href="board.php">Home</a> | <a href="admin.php">Administration</a></h3>
 	</div>
 	</body>
-</head>
+</html>

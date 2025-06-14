@@ -20,9 +20,9 @@
     $success = false;
     $tamper = false;
     if (!empty($_POST)) {
-        $submittampertoken = $_POST["tampertoken"];
-        $submitkey = $_POST["submitkey"];
-        $submitflag = $_POST["submitflag"];
+        $submittampertoken = $_POST["tampertoken"] ?? '';
+        $submitkey = $_POST["submitkey"] ?? '';
+        $submitflag = $_POST["submitflag"] ?? '';
         
         // Check if the submit key is legitimate
         if (in_array($submitkey, $submitkeys)) {
@@ -31,13 +31,17 @@
             $myPassword = 'Wh@t3ver!Wh@t3ver!';
             $myDatabase = "scoreboard";
             $myHost = "localhost";
-            $dbh = mysql_connect($myHost, $myUserName, $myPassword) or die ('I cannot connect to the database because: ' . mysql_error());		
-            mysql_select_db($myDatabase) or die("Unable to select database");
+            
+            // Use mysqli instead of deprecated mysql functions
+            $dbh = mysqli_connect($myHost, $myUserName, $myPassword, $myDatabase) or die ('I cannot connect to the database because: ' . mysqli_connect_error());
             
             // Check if the flag is legitimate
-            $query = "SELECT id, points FROM ctf_flags WHERE flag = '" . mysql_real_escape_string($submitflag) . "'";
-            $myResult = mysql_query($query);
-            $row1 = mysql_fetch_array($myResult);
+            $stmt = mysqli_prepare($dbh, "SELECT id, points FROM ctf_flags WHERE flag = ?");
+            mysqli_stmt_bind_param($stmt, "s", $submitflag);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $row1 = mysqli_fetch_array($result);
+            
             if (empty($row1)) {
                 $error = true;
             }
@@ -46,28 +50,32 @@
                 $points = $row1["points"];
                 
                 // Check that this is not a duplicate submission
-                $query = "SELECT id FROM ctf_scoreboard WHERE team_number = $team_id AND flag_id = $flagid";
-                $myResult = mysql_query($query);
-                $row2 = mysql_fetch_array($myResult);
+                $stmt = mysqli_prepare($dbh, "SELECT id FROM ctf_scoreboard WHERE team_number = ? AND flag_id = ?");
+                mysqli_stmt_bind_param($stmt, "ii", $team_id, $flagid);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+                $row2 = mysqli_fetch_array($result);
+                
                 if (!empty($row2)) {
                     $error = true;
                 }
                 else {
-                
                     // Check for tampering
-                    if ($submittampertoken == $actualtampertoken) {
-                        $query = "INSERT INTO ctf_scoreboard (team_number, flag_id, points, added_on) VALUES ($team_id, $flagid, $points, NOW())";
-                        $myResult = mysql_query($query);
+                    if ($submittampertoken === $actualtampertoken) {
+                        $stmt = mysqli_prepare($dbh, "INSERT INTO ctf_scoreboard (team_number, flag_id, points, added_on) VALUES (?, ?, ?, NOW())");
+                        mysqli_stmt_bind_param($stmt, "iii", $team_id, $flagid, $points);
+                        mysqli_stmt_execute($stmt);
                         $success = true;
                     }
                     else {
-                        $query = "INSERT INTO ctf_scoreboard (team_number, flag_id, points, added_on) VALUES ($team_id, 0, $deduction, NOW())";
-                        $myResult = mysql_query($query);
+                        $stmt = mysqli_prepare($dbh, "INSERT INTO ctf_scoreboard (team_number, flag_id, points, added_on) VALUES (?, 0, ?, NOW())");
+                        mysqli_stmt_bind_param($stmt, "ii", $team_id, $deduction);
+                        mysqli_stmt_execute($stmt);
                         $tamper = true;
                     }
                 }
             }
-            mysql_close();
+            mysqli_close($dbh);
         }
         else {
             $error = true;
@@ -111,13 +119,16 @@
     $myPassword = 'Wh@t3ver!Wh@t3ver!';
     $myDatabase = "scoreboard";
     $myHost = "localhost";
-    $dbh = mysql_connect($myHost, $myUserName, $myPassword) or die ('I cannot connect to the database because: ' . mysql_error());
-    mysql_select_db($myDatabase) or die("Unable to select database");
+    
+    // Use mysqli instead of deprecated mysql functions
+    $dbh = mysqli_connect($myHost, $myUserName, $myPassword, $myDatabase) or die ('I cannot connect to the database because: ' . mysqli_connect_error());
+    
     $query = "SELECT team_number, SUM(points) AS total FROM ctf_scoreboard GROUP BY team_number DESC";
-    $myResult = mysql_query($query);
-    while ($row = mysql_fetch_array($myResult)) {
+    $myResult = mysqli_query($dbh, $query);
+    while ($row = mysqli_fetch_array($myResult)) {
         echo "<tr><td>" . $row["team_number"] . "</td><td>" . $row["total"] . "</td></tr>\n";
     }
+    mysqli_close($dbh);
 ?>
 </table>
 
