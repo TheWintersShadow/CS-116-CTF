@@ -111,11 +111,11 @@
     $myPassword = 'Wh@t3ver!Wh@t3ver!';
     $myDatabase = "scoreboard";
     $myHost = "localhost";
-    $dbh = mysql_connect($myHost, $myUserName, $myPassword) or die ('I cannot connect to the database because: ' . mysql_error());
-    mysql_select_db($myDatabase) or die("Unable to select database");
+    $dbh = mysqli_connect($myHost, $myUserName, $myPassword) or die ('I cannot connect to the database because: ' . mysql_error());
+    mysqli_select_db($myDatabase) or die("Unable to select database");
     $query = "SELECT team_number, SUM(points) AS total FROM ctf_scoreboard GROUP BY team_number DESC";
-    $myResult = mysql_query($query);
-    while ($row = mysql_fetch_array($myResult)) {
+    $myResult = mysqli_query($query);
+    while ($row = mysqli_fetch_array($myResult)) {
         echo "<tr><td>" . $row["team_number"] . "</td><td>" . $row["total"] . "</td></tr>\n";
     }
 ?>
