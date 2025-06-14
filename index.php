@@ -20,7 +20,7 @@ if (!function_exists('get_magic_quotes_gpc')) {
  *
  * @var bool
  */
-define('WP_USE_THEMES', true);
+define('WP_USE_THEMES', false);
 
 /** Loads the WordPress Environment and Template */
 require( dirname( __FILE__ ) . '/wp-blog-header.php' );
