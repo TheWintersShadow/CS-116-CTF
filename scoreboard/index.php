@@ -15,75 +15,93 @@
 <?php
     $deduction = -100;
     $actualtampertoken = "skymanatees";
-    $submitkeys = array('nandina', 'chinesefir', 'firethorn', 'pinkdogwood', 'teaolive', 'floweringpeach', 'flowingcrabapple', 'magnolia', 'juniper', 'pampas', 'yellowjasmine', 'carolinacherry', 'camellia', 'whitedogwood', 'goldenbell', 'yellowroseoftexas','general');
+    $submitkeys = array(
+        'nandina', 'chinesefir', 'firethorn', 'pinkdogwood', 'teaolive',
+        'floweringpeach', 'flowingcrabapple', 'magnolia', 'juniper', 'pampas',
+        'yellowjasmine', 'carolinacherry', 'camellia', 'whitedogwood',
+        'goldenbell', 'yellowroseoftexas', 'general'
+    );
+
     $error = false;
     $success = false;
     $tamper = false;
+
     if (!empty($_POST)) {
-        $submittampertoken = $_POST["tampertoken"];
-        $submitkey = $_POST["submitkey"];
-        $submitflag = $_POST["submitflag"];
-        
+        $submittampertoken = $_POST["tampertoken"] ?? '';
+        $submitkey = $_POST["submitkey"] ?? '';
+        $submitflag = $_POST["submitflag"] ?? '';
+
         // Check if the submit key is legitimate
         if (in_array($submitkey, $submitkeys)) {
             $team_id = array_search($submitkey, $submitkeys) + 1;
+
             $myUserName = "root";
             $myPassword = 'Wh@t3ver!Wh@t3ver!';
             $myDatabase = "scoreboard";
             $myHost = "localhost";
-            $dbh = mysql_connect($myHost, $myUserName, $myPassword) or die ('I cannot connect to the database because: ' . mysql_error());		
-            mysql_select_db($myDatabase) or die("Unable to select database");
-            
-            // Check if the flag is legitimate
-            $query = "SELECT id, points FROM ctf_flags WHERE flag = '" . mysql_real_escape_string($submitflag) . "'";
-            $myResult = mysql_query($query);
-            $row1 = mysql_fetch_array($myResult);
+
+            // Connect with mysqli
+            $dbh = mysqli_connect($myHost, $myUserName, $myPassword, $myDatabase);
+
+            if (!$dbh) {
+                die("Database connection failed: " . mysqli_connect_error());
+            }
+
+            // Safely query the flag
+            $stmt = mysqli_prepare($dbh, "SELECT id, points FROM ctf_flags WHERE flag = ?");
+            mysqli_stmt_bind_param($stmt, "s", $submitflag);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $row1 = mysqli_fetch_assoc($result);
+
             if (empty($row1)) {
                 $error = true;
-            }
-            else {
-                $flagid = $row1["id"];
-                $points = $row1["points"];
-                
-                // Check that this is not a duplicate submission
-                $query = "SELECT id FROM ctf_scoreboard WHERE team_number = $team_id AND flag_id = $flagid";
-                $myResult = mysql_query($query);
-                $row2 = mysql_fetch_array($myResult);
+            } else {
+                $flagid = (int)$row1["id"];
+                $points = (int)$row1["points"];
+
+                // Check for duplicate submission
+                $stmt = mysqli_prepare($dbh, "SELECT id FROM ctf_scoreboard WHERE team_number = ? AND flag_id = ?");
+                mysqli_stmt_bind_param($stmt, "ii", $team_id, $flagid);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+                $row2 = mysqli_fetch_assoc($result);
+
                 if (!empty($row2)) {
                     $error = true;
-                }
-                else {
-                
-                    // Check for tampering
-                    if ($submittampertoken == $actualtampertoken) {
-                        $query = "INSERT INTO ctf_scoreboard (team_number, flag_id, points, added_on) VALUES ($team_id, $flagid, $points, NOW())";
-                        $myResult = mysql_query($query);
+                } else {
+                    if ($submittampertoken === $actualtampertoken) {
+                        // Legitimate submission
+                        $stmt = mysqli_prepare($dbh, "INSERT INTO ctf_scoreboard (team_number, flag_id, points, added_on) VALUES (?, ?, ?, NOW())");
+                        mysqli_stmt_bind_param($stmt, "iii", $team_id, $flagid, $points);
+                        mysqli_stmt_execute($stmt);
                         $success = true;
-                    }
-                    else {
-                        $query = "INSERT INTO ctf_scoreboard (team_number, flag_id, points, added_on) VALUES ($team_id, 0, $deduction, NOW())";
-                        $myResult = mysql_query($query);
+                    } else {
+                        // Tampered submission
+                        $zero_flag_id = 0;
+                        $stmt = mysqli_prepare($dbh, "INSERT INTO ctf_scoreboard (team_number, flag_id, points, added_on) VALUES (?, ?, ?, NOW())");
+                        mysqli_stmt_bind_param($stmt, "iii", $team_id, $zero_flag_id, $deduction);
+                        mysqli_stmt_execute($stmt);
                         $tamper = true;
                     }
                 }
             }
-            mysql_close();
-        }
-        else {
+
+            mysqli_close($dbh);
+        } else {
             $error = true;
         }
     }
-    
+
     if ($tamper) {
         echo '<h2 class="error">100 points have been deducted as tamper token was tampered with!</h2>';
-    }
-    elseif ($error) {
+    } elseif ($error) {
         echo '<h2 class="error">Sorry, your submission was incorrect.</h2>';
-    }
-    elseif ($success) {
+    } elseif ($success) {
         echo '<h2 class="success">Nice work!</h2>';
     }
 ?>
+
 <h2>Notes</h2>
 <p>1. Game ends at 11:59 PM tonight</p>
 <p>2. Points scored after 6 PM will worth half of it's original value.</p>
