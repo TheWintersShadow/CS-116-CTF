@@ -403,8 +403,15 @@ class WP_Widget {
 class WP_Widget_Factory {
 	public $widgets = array();
 
-	public function WP_Widget_Factory() {
+	public function __construct() {
 		add_action( 'widgets_init', array( $this, '_register_widgets' ), 100 );
+	}
+	
+	/**
+	 * PHP4 constructor (deprecated)
+	 */
+	public function WP_Widget_Factory() {
+		self::__construct();
 	}
 
 	public function register($widget_class) {

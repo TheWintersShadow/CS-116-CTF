@@ -735,10 +735,17 @@ class WP_MatchesMapRegex {
 	 * @param array  $matches data to use in map
 	 * @return self
 	 */
-	public function WP_MatchesMapRegex($subject, $matches) {
+	public function __construct($subject, $matches) {
 		$this->_subject = $subject;
 		$this->_matches = $matches;
 		$this->output = $this->_map();
+	}
+	
+	/**
+	 * PHP4 constructor (deprecated)
+	 */
+	public function WP_MatchesMapRegex($subject, $matches) {
+		self::__construct($subject, $matches);
 	}
 
 	/**
