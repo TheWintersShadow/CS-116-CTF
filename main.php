@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	if (!isset($_SESSION['login']))
+	if ($_SESSION['login'] == null)
 	{
 		header("Location: admin.php");
 		exit;
@@ -18,7 +18,7 @@
 </html>
 <!-- Hmmm, the plot thickens... key{83da018c3a5af6d0f2806049c4082387f1de3955}-->';
      }
-     elseif (isset($_COOKIE['lg']) && $_COOKIE['lg'] === 'true') {
+     elseif (isset($_COOKIE['lg']) && strcmp($_COOKIE['lg'], 'true') == 0) {
      	    echo "<!DOCTYPE html><html><head><title>Main</title></head><body><p>Congratulations! Here you go: key{2797449c56a55474cf682003e60cde0cbb05335a}</p></body></html>";
      }
      else {
