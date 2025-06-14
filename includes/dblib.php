@@ -3,12 +3,9 @@
 	$myPassword = 'Wh@t3ver!Wh@t3ver!';
 	$myDBName = 'board';
 	$myHost = 'localhost';
-	$db = mysql_connect($myHost, $myUserName, $myPassword);
+	$db = mysqli_connect($myHost, $myUserName, $myPassword, $myDBName);
 	if (!$db) {
-		die('Cannot connect to the database: ' . mysql_error());
-	}
-	else {
-		mysql_select_db($myDBName) or die("Unable to select database");
+		die('Cannot connect to the database: ' . mysqli_connect_error());
 	}
 
 	function getDB()
@@ -20,20 +17,19 @@
 	function getLogin ($login, $password)
 	{
 		global $db;
-		$result = mysql_query("SELECT id FROM users WHERE password = SHA1('" . $password . "') and login = '" . $login . "'");
-		if (!result) {
-			$message  = 'Invalid query: ' . mysql_error() . "\n";
+		$result = mysqli_query($db, "SELECT id FROM users WHERE password = SHA1('" . $password . "') and login = '" . $login . "'");
+		if (!$result) {
+			$message  = 'Invalid query: ' . mysqli_error($db) . "\n";
 			$message .= 'Whole query: ' . $query;
 			die($message);
 		}
 		else {
-			$row = array();
-			$row = mysql_fetch_array($result);
+			$row = mysqli_fetch_array($result);
 			if (!empty($row)) {
 				return $row;
 			}
 		}
-		mysql_free_result($result);
+		mysqli_free_result($result);
 		return false;
 	}
 ?>
