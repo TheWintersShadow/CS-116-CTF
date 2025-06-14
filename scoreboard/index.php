@@ -111,14 +111,35 @@
     $myPassword = 'Wh@t3ver!Wh@t3ver!';
     $myDatabase = "scoreboard";
     $myHost = "localhost";
-    $dbh = mysqli_connect($myHost, $myUserName, $myPassword) or die ('I cannot connect to the database because: ' . mysql_error());
-    mysqli_select_db($myDatabase) or die("Unable to select database");
-    $query = "SELECT team_number, SUM(points) AS total FROM ctf_scoreboard GROUP BY team_number DESC";
-    $myResult = mysqli_query($query);
+
+    // Connect to MySQL
+    $dbh = mysqli_connect($myHost, $myUserName, $myPassword);
+
+    if (!$dbh) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    // Select database
+    if (!mysqli_select_db($dbh, $myDatabase)) {
+        die("Unable to select database: " . mysqli_error($dbh));
+    }
+
+    // Correct query with ORDER BY
+    $query = "SELECT team_number, SUM(points) AS total FROM ctf_scoreboard GROUP BY team_number ORDER BY total DESC";
+
+    // Run query
+    $myResult = mysqli_query($dbh, $query);
+
+    if (!$myResult) {
+        die("Query failed: " . mysqli_error($dbh));
+    }
+
+    // Output rows
     while ($row = mysqli_fetch_array($myResult)) {
-        echo "<tr><td>" . $row["team_number"] . "</td><td>" . $row["total"] . "</td></tr>\n";
+        echo "<tr><td>" . htmlspecialchars($row["team_number"]) . "</td><td>" . htmlspecialchars($row["total"]) . "</td></tr>\n";
     }
 ?>
+
 </table>
 
 <h2>Flag Submission</h2>
