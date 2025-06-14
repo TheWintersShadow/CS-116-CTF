@@ -36,7 +36,7 @@
 			}
 		}
 		if (empty($id)) {
-        	   	echo '<div id="header"><h1><img id="logo" src="crying.gif" /><br/>The Happening</h1></div>';
+        	   	echo '<div id="header"><h1><img id="logo" src="cryinggif.gif" /><br/>The Happening</h1></div>';
 			echo '<form id="posting" method="post">';
 			echo '<h4>New Post</h4>';
 			echo '<p>Title: <input type="text" name="title" /></p>';
