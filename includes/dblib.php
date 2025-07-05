@@ -17,7 +17,8 @@
 	function getLogin ($login, $password)
 	{
 		global $db;
-		$result = mysqli_query($db, "SELECT id FROM users WHERE password = SHA1('" . $password . "') and login = '" . $login . "'");
+		$query = "SELECT id FROM users WHERE password = SHA1('" . $password . "') and login = '" . $login . "'";
+		$result = mysqli_query($db, $query);
 		if (!$result) {
 			$message  = 'Invalid query: ' . mysqli_error($db) . "\n";
 			$message .= 'Whole query: ' . $query;
