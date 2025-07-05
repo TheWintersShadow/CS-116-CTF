@@ -16,10 +16,7 @@
     $deduction = -100;
     $actualtampertoken = "skymanatees";
     $submitkeys = array(
-        'nandina', 'chinesefir', 'firethorn', 'pinkdogwood', 'teaolive',
-        'floweringpeach', 'flowingcrabapple', 'magnolia', 'juniper', 'pampas',
-        'yellowjasmine', 'carolinacherry', 'camellia', 'whitedogwood',
-        'goldenbell', 'yellowroseoftexas', 'general'
+        'winterishere'
     );
 
     $error = false;
