@@ -28,8 +28,8 @@ body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:16px;back
         // Check if the submit key is legitimate
         if (in_array($submitkey, $submitkeys)) {
             $team_id = array_search($submitkey, $submitkeys) + 1;
-            $myUserName = "ctf2025scoreboard";
-            $myPassword = 'WeLoveToParty';
+            $myUserName = "root";
+            $myPassword = 'Wh@t3ver!Wh@t3ver!';
             $myDatabase = "scoreboard";
             $myHost = "localhost";
             $db = mysqli_connect($myHost, $myUserName, $myPassword) or die ('I cannot connect to the database because: ' . mysqli_error($db));		
