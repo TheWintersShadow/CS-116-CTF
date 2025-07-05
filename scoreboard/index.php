@@ -59,7 +59,7 @@
 
                 // Check for duplicate submission
                 $stmt = mysqli_prepare($dbh, "SELECT id FROM ctf_scoreboard WHERE team_number = ? AND flag_id = ?");
-                mysqli_stmt_bind_param($stmt, "ii", $team_id, $flagid);
+                mysqli_stmt_bind_param($stmt, "si", $team_id, $flagid);
                 mysqli_stmt_execute($stmt);
                 $result = mysqli_stmt_get_result($stmt);
                 $row2 = mysqli_fetch_assoc($result);
@@ -70,14 +70,14 @@
                     if ($submittampertoken === $actualtampertoken) {
                         // Legitimate submission
                         $stmt = mysqli_prepare($dbh, "INSERT INTO ctf_scoreboard (team_number, flag_id, points, added_on) VALUES (?, ?, ?, NOW())");
-                        mysqli_stmt_bind_param($stmt, "iii", $team_id, $flagid, $points);
+                        mysqli_stmt_bind_param($stmt, "sii", $team_id, $flagid, $points);
                         mysqli_stmt_execute($stmt);
                         $success = true;
                     } else {
                         // Tampered submission
                         $zero_flag_id = 0;
                         $stmt = mysqli_prepare($dbh, "INSERT INTO ctf_scoreboard (team_number, flag_id, points, added_on) VALUES (?, ?, ?, NOW())");
-                        mysqli_stmt_bind_param($stmt, "iii", $team_id, $zero_flag_id, $deduction);
+                        mysqli_stmt_bind_param($stmt, "sii", $team_id, $zero_flag_id, $deduction);
                         mysqli_stmt_execute($stmt);
                         $tamper = true;
                     }
