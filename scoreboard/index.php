@@ -30,7 +30,7 @@
 
         // Check if the submit key is legitimate
         if (in_array($submitkey, $submitkeys)) {
-            $team_id = $submitkey //array_search($submitkey, $submitkeys) + 1;
+            $team_id = $submitkey; //array_search($submitkey, $submitkeys) + 1;
 
             $myUserName = "root";
             $myPassword = 'Wh@t3ver!Wh@t3ver!';
