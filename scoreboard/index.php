@@ -46,10 +46,14 @@
 
             // Safely query the flag
             $stmt = mysqli_prepare($dbh, "SELECT id, points FROM ctf_flags WHERE flag = ?");
-            mysqli_stmt_bind_param($stmt, "s", $submitflag);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-            $row1 = mysqli_fetch_assoc($result);
+            if ($stmt) {
+                mysqli_stmt_bind_param($stmt, "s", $submitflag);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+                $row1 = $result ? mysqli_fetch_assoc($result) : null;
+            } else {
+                $row1 = null;
+            }
 
             if (empty($row1)) {
                 $error = true;
@@ -59,10 +63,14 @@
 
                 // Check for duplicate submission
                 $stmt = mysqli_prepare($dbh, "SELECT id FROM ctf_scoreboard WHERE team_number = ? AND flag_id = ?");
-                mysqli_stmt_bind_param($stmt, "si", $team_id, $flagid);
-                mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
-                $row2 = mysqli_fetch_assoc($result);
+                if ($stmt) {
+                    mysqli_stmt_bind_param($stmt, "si", $team_id, $flagid);
+                    mysqli_stmt_execute($stmt);
+                    $result = mysqli_stmt_get_result($stmt);
+                    $row2 = $result ? mysqli_fetch_assoc($result) : null;
+                } else {
+                    $row2 = null;
+                }
 
                 if (!empty($row2)) {
                     $error = true;
