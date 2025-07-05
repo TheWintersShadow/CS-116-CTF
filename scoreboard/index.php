@@ -30,7 +30,7 @@
 
         // Check if the submit key is legitimate
         if (in_array($submitkey, $submitkeys)) {
-            $team_id = array_search($submitkey, $submitkeys) + 1;
+            $team_id = $submitkey //array_search($submitkey, $submitkeys) + 1;
 
             $myUserName = "root";
             $myPassword = 'Wh@t3ver!Wh@t3ver!';
@@ -113,12 +113,9 @@
 <p>Challenge 7: A whole bunch of CS40 homeworks found... <span class="points">200 points</span></p>
 <p>Challenge 8: XSS gone sinister <span class="points">300 points</span></p>
 <p>Challenge 9: Where are the robots? <span class="points">200 points</span></p>
-<p>Challenge 10: Going for a walk in .git <span class="points">150 points</span></p>
-<p>Challenge 11: Going for a walk in .git <span class="points">150 points</span></p>
-<p>Challenge 12: Going for a walk in .git <span class="points">150 points</span></p>
-<p>Challenge 13: Going for a walk in .git <span class="points">150 points</span></p>
-<p>Challenge 14: Going for a walk in .git <span class="points">150 points</span></p>
-<p>Challenge 15: Going for a walk in .git <span class="points">150 points</span></p>
+<p>Challenge 10: LOL <span class="points">450 points</span></p>
+<p>Challenge 11: Spongebob Hunt <span class="points">250 points</span></p>
+<p>Challenge 12: Find the Bobo <span class="points">300 points</span></p>
 
 <h2>Scores</h2>
 <table>
