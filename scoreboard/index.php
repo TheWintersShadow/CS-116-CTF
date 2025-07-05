@@ -103,18 +103,23 @@
 <p>1. Game ends at 11:59 PM tonight</p>
 <p>2. Points scored after 6 PM will worth half of it's original value.</p>
 <h2>Challenges</h2>
+<p>Challenge 0: Freebee <span class="points">1 points</span></p>
 <p>Challenge 1: You are staring right at it <span class="points">100 points</span></p>
-<p>Challenge 2: Unnecessary service <span class="points">100 points</span></p>
-<p>Challenge 3: Analyze the binary. <span class="points">200 points</span></p>
-<p>Challenge 4: Do not give Ming a hug but... <span class="points">100 points</span></p>
-<p>Challenge 5: All your base64 are belong to us. <span class="points">200 points</span></p>
-<p>Challenge 6: Don't ask me if something looks wrong.  Look again, pay careful attention. <span class="points">200 points</span></p>
-<p>Challenge 7: Don't ask me if something looks wrong.  Look again, pay really careful attention. <span class="points">300 points</span></p>
-<p>Challenge 8: Did you forget to logout? <span class="points">100 points</span></p>
-<p>Challenge 9: Buried in the dump, part 1: wide open <span class="points">100 points</span></p>
-<p>Challenge 10: Buried in the dump, part 1A: metadata p0rn <span class="points">100 points</span></p>
-<p>Challenge 11: Buried in the dump, part 2: needle in the haystack <span class="points">400 points</span></p>
-<p>Challenge 12: About my friend bobo... <span class="points">200 points</span></p>
+<p>Challenge 2: All your base64 are belong to us. <span class="points">200 points</span></p>
+<p>Challenge 3: Going for a walk in .git <span class="points">150 points</span></p>
+<p>Challenge 4: Don't ask me if something looks wrong. Look again, pay careful attention <span class="points">200 points</span></p>
+<p>Challenge 5: Don't ask me if something looks wrong. Look again, pay really careful attention <span class="points">300 points</span></p>
+<p>Challenge 6: That readme is peculiar... <span class="points">150 points</span></p>
+<p>Challenge 7: A whole bunch of CS40 homeworks found... <span class="points">200 points</span></p>
+<p>Challenge 8: XSS gone sinister <span class="points">300 points</span></p>
+<p>Challenge 9: Where are the robots? <span class="points">200 points</span></p>
+<p>Challenge 10: Going for a walk in .git <span class="points">150 points</span></p>
+<p>Challenge 11: Going for a walk in .git <span class="points">150 points</span></p>
+<p>Challenge 12: Going for a walk in .git <span class="points">150 points</span></p>
+<p>Challenge 13: Going for a walk in .git <span class="points">150 points</span></p>
+<p>Challenge 14: Going for a walk in .git <span class="points">150 points</span></p>
+<p>Challenge 15: Going for a walk in .git <span class="points">150 points</span></p>
+
 <h2>Scores</h2>
 <table>
 <tr>

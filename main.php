@@ -16,10 +16,10 @@
 <hr><center>nginx/1.4.6 (Ubuntu)</center>
 </body>
 </html>
-<!-- Hmmm, the plot thickens... key{83da018c3a5af6d0f2806049c4082387f1de3955}-->';
+<!-- Hmmm, the plot thickens... key{b4280c2dcd3f38c5024c813b14bb3cf188cf8a69400578aa00dad9d2f57fd6ab}-->';
      }
      elseif (isset($_COOKIE['lg']) && strcmp($_COOKIE['lg'], 'true') == 0) {
-     	    echo "<!DOCTYPE html><html><head><title>Main</title></head><body><p>Congratulations! Here you go: key{2797449c56a55474cf682003e60cde0cbb05335a}</p></body></html>";
+     	    echo "<!DOCTYPE html><html><head><title>Main</title></head><body><p>Congratulations! Here you go: key{9c8cd382edeb7a8b8f865de0a7b1a51a884f5cbe8f2ae3d88e4d550752f8433c}</p></body></html>";
      }
      else {
                 echo '
@@ -30,5 +30,5 @@
 <hr><center>nginx/1.4.6 (Ubuntu)</center>
 </body>
 </html>
-<!-- Hmmm, the plot thickens... key{83da018c3a5af6d0f2806049c4082387f1de3955}-->';}
+<!-- Hmmm, the plot thickens... key{b4280c2dcd3f38c5024c813b14bb3cf188cf8a69400578aa00dad9d2f57fd6ab}-->';}
 ?>
