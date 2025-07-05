@@ -2,99 +2,86 @@
 
 <html>
 <head>
-<title>CTF Scoreboard</title>
+<title>2025 CTF Scoreboard</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
 <style>
-@import url(http://fonts.googleapis.com/css?family=Happy+Monkey);body{font-family:"Happy Monkey","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:16px;background-color:#fff}h1,h2,h3,h4,p{text-align:center}.points{color:#f0f}.error{color:red}.success{color:green}table{margin-left:auto;margin-right:auto}tr,td,th{border-style:groove}th{font-style:italic}
+body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:16px;background-color:#fff}h1,h2,h3,h4,p{text-align:center}.points{color:#f0f}.error{color:red}.success{color:green}table{margin-left:auto;margin-right:auto}tr,td,th{border-style:groove}th{font-style:italic}
 </style>
 </head>
 
 <body>
-<h1>CTF Scoreboard</h1>
+<h1>2025 CTF Scoreboard</h1>
 <?php
     $deduction = -100;
     $actualtampertoken = "skymanatees";
-    $submitkeys = array(
-        'winterishere'
-    );
-
+    // Your team's submission key to the CTF game is: 
+    $submitkeys = array('winterishere');
     $error = false;
     $success = false;
     $tamper = false;
-
     if (!empty($_POST)) {
-        $submittampertoken = $_POST["tampertoken"] ?? '';
-        $submitkey = $_POST["submitkey"] ?? '';
-        $submitflag = $_POST["submitflag"] ?? '';
-
+        $submittampertoken = $_POST["tampertoken"];
+        $submitkey = $_POST["submitkey"];
+        $submitflag = $_POST["submitflag"];
+        
         // Check if the submit key is legitimate
         if (in_array($submitkey, $submitkeys)) {
             $team_id = array_search($submitkey, $submitkeys) + 1;
-
-            $myUserName = "root";
-            $myPassword = 'Wh@t3ver!Wh@t3ver!';
+            $myUserName = "ctf2025scoreboard";
+            $myPassword = 'WeLoveToParty';
             $myDatabase = "scoreboard";
             $myHost = "localhost";
-
-            // Connect with mysqli
-            $dbh = mysqli_connect($myHost, $myUserName, $myPassword, $myDatabase);
-
-            if (!$dbh) {
-                die("Database connection failed: " . mysqli_connect_error());
-            }
-
-            // Safely query the flag
-            $stmt = mysqli_prepare($dbh, "SELECT id, points FROM ctf_flags WHERE flag = ?");
-            mysqli_stmt_bind_param($stmt, "s", $submitflag);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-            $row1 = mysqli_fetch_assoc($result);
-
+            $db = mysqli_connect($myHost, $myUserName, $myPassword) or die ('I cannot connect to the database because: ' . mysqli_error($db));		
+            mysqli_select_db($db, $myDatabase) or die("Unable to select database");
+            
+            // Check if the flag is legitimate
+            $query = "SELECT id, points FROM ctf_flags WHERE flag = '" . mysqli_real_escape_string($db, $submitflag) . "'";
+            $myResult = mysqli_query($db, $query);
+            $row1 = mysqli_fetch_array($myResult);
             if (empty($row1)) {
                 $error = true;
-            } else {
-                $flagid = (int)$row1["id"];
-                $points = (int)$row1["points"];
-
-                // Check for duplicate submission
-                $stmt = mysqli_prepare($dbh, "SELECT id FROM ctf_scoreboard WHERE team_number = ? AND flag_id = ?");
-                mysqli_stmt_bind_param($stmt, "ii", $team_id, $flagid);
-                mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
-                $row2 = mysqli_fetch_assoc($result);
-
+            }
+            else {
+                $flagid = $row1["id"];
+                $points = $row1["points"];
+                
+                // Check that this is not a duplicate submission
+                $query = "SELECT id FROM ctf_scoreboard WHERE team_number = $team_id AND flag_id = $flagid";
+                $myResult = mysqli_query($db, $query);
+                $row2 = mysqli_fetch_array($myResult);
                 if (!empty($row2)) {
                     $error = true;
-                } else {
-                    if ($submittampertoken === $actualtampertoken) {
-                        // Legitimate submission
-                        $stmt = mysqli_prepare($dbh, "INSERT INTO ctf_scoreboard (team_number, flag_id, points, added_on) VALUES (?, ?, ?, NOW())");
-                        mysqli_stmt_bind_param($stmt, "iii", $team_id, $flagid, $points);
-                        mysqli_stmt_execute($stmt);
+                }
+                else {
+                
+                    // Check for tampering
+                    if ($submittampertoken == $actualtampertoken) {
+                        $query = "INSERT INTO ctf_scoreboard (team_number, flag_id, points, added_on) VALUES ($team_id, $flagid, $points, NOW())";
+                        $myResult = mysqli_query($db, $query);
                         $success = true;
-                    } else {
-                        // Tampered submission
-                        $zero_flag_id = 0;
-                        $stmt = mysqli_prepare($dbh, "INSERT INTO ctf_scoreboard (team_number, flag_id, points, added_on) VALUES (?, ?, ?, NOW())");
-                        mysqli_stmt_bind_param($stmt, "iii", $team_id, $zero_flag_id, $deduction);
-                        mysqli_stmt_execute($stmt);
+                    }
+                    else {
+                        $query = "INSERT INTO ctf_scoreboard (team_number, flag_id, points, added_on) VALUES ($team_id, 0, $deduction, NOW())";
+                        $myResult = mysqli_query($db, $query);
                         $tamper = true;
                     }
                 }
             }
-
-            mysqli_close($dbh);
-        } else {
+            mysqli_close($db);
+        }
+        else {
             $error = true;
         }
     }
-
+    
     if ($tamper) {
         echo '<h2 class="error">100 points have been deducted as tamper token was tampered with!</h2>';
-    } elseif ($error) {
+    }
+    elseif ($error) {
         echo '<h2 class="error">Sorry, your submission was incorrect.</h2>';
-    } elseif ($success) {
+    }
+    elseif ($success) {
         echo '<h2 class="success">Nice work!</h2>';
     }
 ?>
